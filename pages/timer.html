@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <link rel="stylesheet" href="../views/style.css" />
+    <!-- Fontawesome CDN Link -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- bootstrap link -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <style>
+      .container,
+      h1 {
+        text-align: center;
+      }
+
+      .card {
+        border-radius: 10px;
+      }
+
+      .card-body .row {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg p-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Jangan lupa nugas</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="../views/index.php">Todo-List</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="schedule.php">Jadwal Pelajaran</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="">Stopwatch & Timer</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" style="color: salmon" href="#"><i class="fa-solid fa-arrow-right-from-bracket fa-rotate-180"></i> Log Out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- navbar end -->
+    <!-- stopwatch -->
+    <div class="container">
+      <div class="card m-5">
+        <div class="card-header">
+          <h1 class="card-title">Stopwatch</h1>
+        </div>
+        <div class="card-body p-5">
+          <div class="row">
+            <div class="col">
+              <h2 id="stopwatchMinutes">00</h2>
+            </div>
+            <div class="col">
+              <h2 id="stopwatchSeconds">00</h2>
+            </div>
+            <div class="col">
+              <h2 id="stopwatchMilliseconds">00</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary mr-2" onclick="toggleStopwatch()">Start / Stop</button>
+          <button class="btn btn-secondary" onclick="resetStopwatch()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <!-- stopwatch end -->
+    <!-- timer -->
+    <div class="container">
+      <div class="card m-5">
+        <div class="card-header">
+          <h1 class="card-title">Timer</h1>
+        </div>
+        <div class="card-body p-5">
+          <div class="row">
+            <div class="col">
+              <h2 id="timerMinutes">00</h2>
+            </div>
+            <div class="col">
+              <h2 id="timerSeconds">00</h2>
+            </div>
+            <div class="col">
+              <h2 id="timerMilliseconds">00</h2>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="input-group mb-3">
+            <span class="input-group-text">Set Timer:</span>
+            <select class="form-select" id="timerValue">
+              <option value="300">5 minutes</option>
+              <option value="900">15 minutes</option>
+              <option value="1800">30 minutes</option>
+              <option value="3600">1 hour</option>
+            </select>
+          </div>
+          <button class="btn btn-success mr-2" onclick="startTimer()">Start</button>
+          <button class="btn btn-danger mr-2" onclick="stopTimer()">Stop</button>
+          <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
+        </div>
+      </div>
+    </div>
+    <!-- timer end -->
+    <!-- footer -->
+    <footer>
+      <div class="content" style="padding: 20px 10px">
+        <div class="top">
+          <div class="media-icons">
+            <a target="_blank" href="https://github.com/fesloth"><i class="fab fa-github"></i></a>
+            <a target="_blank" href="https://twitter.com/nielvoff"><i class="fab fa-twitter"></i></a>
+            <a target="_blank" href="https://instagram.com/fesloth"><i class="fab fa-instagram"></i></a>
+            <a target="_blank" href="https://www.linkedin.com/in/syahla-nur-azizah-3a8ab4270/"><i class="fab fa-linkedin-in"></i></a>
+            <a target="_blank" href="https://gitlab.com/fesloth"><i class="fab fa-gitlab"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- footer end -->
+    <script>
+      // stopwatch
+      var stopwatchInterval;
+      var stopwatchMilliseconds = 0;
+      var stopwatchSeconds = 0;
+      var stopwatchMinutes = 0;
+      var stopwatchRunning = false;
+
+      function updateStopwatch() {
+        stopwatchMilliseconds += 10;
+
+        if (stopwatchMilliseconds === 1000) {
+          stopwatchMilliseconds = 0;
+          stopwatchSeconds++;
+        }
+
+        if (stopwatchSeconds === 60) {
+          stopwatchSeconds = 0;
+          stopwatchMinutes++;
+        }
+
+        document.getElementById("stopwatchMinutes").textContent = stopwatchMinutes < 10 ? "0" + stopwatchMinutes : stopwatchMinutes;
+        document.getElementById("stopwatchSeconds").textContent = stopwatchSeconds < 10 ? "0" + stopwatchSeconds : stopwatchSeconds;
+        document.getElementById("stopwatchMilliseconds").textContent = stopwatchMilliseconds < 10 ? "0" + stopwatchMilliseconds : stopwatchMilliseconds;
+      }
+
+      function toggleStopwatch() {
+        if (stopwatchRunning) {
+          clearInterval(stopwatchInterval);
+          stopwatchRunning = false;
+        } else {
+          stopwatchInterval = setInterval(updateStopwatch, 10);
+          stopwatchRunning = true;
+        }
+      }
+
+      function resetStopwatch() {
+        clearInterval(stopwatchInterval);
+        stopwatchMilliseconds = 0;
+        stopwatchSeconds = 0;
+        stopwatchMinutes = 0;
+        stopwatchRunning = false;
+        document.getElementById("stopwatchMinutes").textContent = "00";
+        document.getElementById("stopwatchSeconds").textContent = "00";
+        document.getElementById("stopwatchMilliseconds").textContent = "00";
+      }
+
+      // timer
+      var timerInterval;
+      var timerMilliseconds = 0;
+      var timerSeconds = 0;
+      var timerMinutes = 0;
+      var timerRunning = false;
+      var timerDuration = 0;
+
+      function updateTimer() {
+        timerMilliseconds -= 10;
+
+        if (timerMilliseconds < 0) {
+          timerMilliseconds = 990;
+          timerSeconds--;
+        }
+
+        if (timerSeconds < 0) {
+          timerSeconds = 59;
+          timerMinutes--;
+        }
+
+        if (timerMinutes < 0) {
+          stopTimer();
+          return;
+        }
+
+        document.getElementById("timerMinutes").textContent = timerMinutes < 10 ? "0" + timerMinutes : timerMinutes;
+        document.getElementById("timerSeconds").textContent = timerSeconds < 10 ? "0" + timerSeconds : timerSeconds;
+        document.getElementById("timerMilliseconds").textContent = timerMilliseconds < 10 ? "0" + timerMilliseconds : timerMilliseconds;
+      }
+
+      function startTimer() {
+        if (!timerRunning) {
+          timerDuration = parseInt(document.getElementById("timerValue").value);
+          timerMinutes = Math.floor(timerDuration / 60);
+          timerSeconds = timerDuration % 60;
+
+          timerInterval = setInterval(updateTimer, 10);
+          timerRunning = true;
+        }
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+        timerRunning = false;
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        timerMilliseconds = 0;
+        timerSeconds = 0;
+        timerMinutes = 0;
+        timerRunning = false;
+        document.getElementById("timerMinutes").textContent = "00";
+        document.getElementById("timerSeconds").textContent = "00";
+        document.getElementById("timerMilliseconds").textContent = "00";
+      }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>
